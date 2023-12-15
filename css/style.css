@@ -1,0 +1,137 @@
+body {
+  font-family: 'Arial', Helvetica, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f5f5f5;
+}
+
+h2, h3 {
+  margin: 10px;
+  font-size: 18px;
+}
+
+#text-description {
+  margin-top: 
+}
+
+#default {
+  margin-top: 50px;
+}
+
+#container {
+  display: flex;
+  height: 100vh;
+  flex-direction: row;
+  align-items: stretch;
+}
+
+#side-panel {
+  flex-basis: 500px;
+  overflow-y: scroll;
+  background-color: #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+#map {
+  flex-grow: 1;
+}
+
+@media (max-width: 1024px) {
+  #side-panel {
+    display: none;
+  }
+}
+
+#title {
+  margin-left: 0.95rem;
+}
+
+button {
+  margin-bottom: 10px;
+  margin-left: 0.95rem;
+  padding: 8px 16px;
+  background-color: #e0e0e0;
+  color: #000000;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #bdbdbd;
+}
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+  width: 100%;
+  margin-top: 20px;
+  border: 1px solid #ddd;
+}
+
+th, td {
+  text-align: left;
+  padding: 12px;
+  border-bottom: 1px solid #ddd;
+}
+
+tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.map-overlay {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 10px;
+  font-family: Arial, sans-serif;
+  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+#features {
+  top: 0;
+  max-height: 150px;
+  margin-top: 20px;
+  margin-right: 20px;
+  width: 250px;
+  overflow: hidden;
+  text-align: center;
+}
+
+#legend {
+  padding: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  line-height: 18px;
+  margin-bottom: 20px;
+  margin-right: 20px;
+  width: 150px;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 5px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+}
+
+.legend-key {
+  width: 20px;
+  height: 20px;
+  margin-right: 8px;
+  border-radius: 50%;
+}
+
+.legend-item.crime .legend-key {
+  width: 10px;
+  height: 10px;
+}
+
+.mapboxgl-canvas-container.mapboxgl-interactive,
+.mapboxgl-ctrl-group button.mapboxgl-ctrl-compass {
+  cursor: unset;
+}

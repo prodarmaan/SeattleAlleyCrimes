@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="author" content="Armaan Azeem">
+  <link rel="stylesheet" href="css/style.css">
+  <link href="https://api.mapbox.com/mapbox-gl-js/v2.14.1/mapbox-gl.css" rel="stylesheet">
+  <script src="https://api.mapbox.com/mapbox-gl-js/v2.14.1/mapbox-gl.js"></script>
+  <title>Seattle Alleys And Crimes</title>
+</head>
+
+<body>
+  <main id="container">
+
+    <!-- <div id="side-panel">
+
+      <h1 id="title">Seattle Alleys & Crimes</h1>
+      <button onclick="sortTable(3)">Sort by Income</button>
+      <button onclick="sortTable(2)">Sort by Population</button>
+
+      <table>
+        <tr>
+          <th>Community Name</th>
+          <th>Census Tract</th>
+          <th>Population</th>
+          <th>Per Capita Income</th>
+        </tr>
+      </table>
+
+    </div> -->
+
+    <div id="map"></div>
+
+    <div class='map-overlay' id='features'>
+      <div id='text-description'>
+        <h3 id="default">Hover over a crime for more information.</h3>
+      </div>
+    </div>
+
+    <div class='map-overlay' id='legend'>
+      <div class="legend-item crime">
+        <div class="legend-key" style="background-color: #FF1010;"></div>
+        <div class="legend-text">Crime</div>
+      </div>
+      <div class="legend-item">
+        <div class="legend-key" style="background-color: #00E3FF; width: 20px; height: 3px;"></div>
+        <div class="legend-text">Alley</div>
+      </div>
+    </div>
+  </main>
+
+  <!-- javascript configuration for map -->
+  <script>
+    mapboxgl.accessToken =
+      'pk.eyJ1IjoicGhvZWJlbWFjZSIsImEiOiJjbHBiajVteGYwZGx5MnFveWpqNWQ4bWl5In0.hLWt7pwDPj_plteMfRY-uQ';
+
+    const map = new mapboxgl.Map({
+      container: 'map',
+      style: 'mapbox://styles/mapbox/dark-v11',
+      zoom: 13.3,
+      center: [-122.33, 47.612]
+    });
+
+    async function geojsonFetch() {
+      let response = await fetch('assets/SPDCrime2023Filtered.geojson');
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      let crimes = await response.json();
+
+      response = await fetch('assets/GreaterDowntownAlleys.geojson');
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      let alleys = await response.json();
+
+      // adding alley layer
+      map.addLayer({
+        id: 'alleys-layer',
+        type: 'line',
+        source: {
+          type: 'geojson',
+          data: alleys
+        },
+        paint: {
+          'line-color': '#00E3FF',
+          'line-width': 2,
+          'line-opacity': 0.6
+        }
+      });
+
+      // adding crime layer
+      map.addLayer({
+        id: 'crime-layer',
+        type: 'circle',
+        source: {
+          type: 'geojson',
+          data: crimes
+        },
+        paint: {
+          'circle-radius': 5,
+          'circle-color': '#FF1010',
+          'circle-stroke-width': 0,
+          'circle-stroke-color': 'white',
+          'circle-opacity': 0.6
+        }
+      });
+
+      // Variable to store the ID of the currently hovered feature
+      let hoveredCrimeId = null;
+
+      // interactive hover element to display crime details
+      map.on('mousemove', 'crime-layer', (e) => {
+        const features = e.features;
+
+        if (!features || features.length === 0) {
+          return;
+        }
+
+        // Extract information from the hovered feature
+        const crimeFeature = features[0];
+        const date = crimeFeature.properties['Report.DateTime'];
+        const crimeType = crimeFeature.properties['Offense'];
+
+        // Update the content of the map overlay only if the hovered feature changes
+        if (crimeFeature.id !== hoveredCrimeId) {
+          hoveredCrimeId = crimeFeature.id;
+
+          // Update the content of the map overlay
+          const infoContainer = document.getElementById('text-description');
+          infoContainer.innerHTML = `<h3>Crime Details</h3>
+                                 <p><strong>Date:</strong> ${date}</p>
+                                 <p><strong>Type:</strong> ${crimeType}</p>`;
+        }
+      });
+
+      // Event listener for the mouseleave event on the crime layer
+      map.on('mouseleave', 'crime-layer', () => {
+        // Clear the content of the map overlay when the mouse leaves the crime layer
+        const infoContainer = document.getElementById('text-description');
+        infoContainer.innerHTML = `<h3 id="default">Hover over a crime for more information.</h3>`;
+
+        // Reset the hovered feature ID
+        hoveredCrimeId = null;
+      });
+    }
+
+    geojsonFetch().catch((e) => {
+      console.log('There has been a problem with your fetch operation: ' + e.message);
+    });
+  </script>
+</body>
+
+</html>
