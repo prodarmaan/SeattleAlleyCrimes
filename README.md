@@ -7,7 +7,7 @@ This application maps the alleyways of Greater Downtown Seattle and instances of
 ## Project Goal
 The goal of this project is to explore and visualise the geospatial relationship between alleyways and crimes in the Greater Downtown Seattle area. The target audience of this map is Seattle residents, government officials, researchers and the general public interested in understanding this geospatial relationship.
 
-Application URL: UPDATE
+Application URL: https://prodarmaan.github.io/SeattleAlleyCrimes/
 
 ## Map Preview
 ![map_preview](img/preview.png)
